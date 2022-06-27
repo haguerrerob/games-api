@@ -5,10 +5,10 @@ import * as path from 'path'
 import { config } from 'dotenv'
 config()
 
-const { HEROKU_POSTGRES, DB_USER, DB_PASSWORD, DB_HOST } = process.env
+const { DATABASE_URL, DB_USER, DB_PASSWORD, DB_HOST } = process.env
 
 const sequelize = new Sequelize(
-  `${HEROKU_POSTGRES}`,
+  `${DATABASE_URL}`,
   //   `${HEROKU_POSTGRES}` ||
   //     `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/gamesapi`,
   {
