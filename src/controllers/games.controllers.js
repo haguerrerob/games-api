@@ -16,7 +16,8 @@ export const getGames = async (req, res) => {
         // (for..of..) is multiple asynchronous calls.
         genreType.push(el.genre)
         const filename = path
-          .join(process.cwd(), '/src/img/')
+          // .join(process.cwd(), '/src/img/')
+          .join(process.cwd(), '/public/img/')
           .concat(`thumbnail_half_${el.id}.jpg`)
         console.log(filename)
         Jimp.read(el.thumbnail).then((image) => {
