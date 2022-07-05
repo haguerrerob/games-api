@@ -11,31 +11,26 @@ export const getGames = async (req, res) => {
     const result = await Game.findAll()
     if (result.length < 1) {
       const genreType = []
+      // Peticióin a la API de todos los juegos...
       const games = await axios.get(`https://www.freetogame.com/api/games`)
       for (const el of games.data) {
         // (for..of..) is multiple asynchronous calls.
         genreType.push(el.genre)
         const filename = path
-          // .join(process.cwd(), '/src/img/')
           .join(process.cwd(), '/public/img/')
           .concat(`thumbnail_half_${el.id}.jpg`)
-        console.log(filename)
         Jimp.read(el.thumbnail).then((image) => {
           image.greyscale().scale(0.5).write(filename)
         })
+        const dataGame = await axios.get(
+          `https://www.freetogame.com/api/game?id=${el.id}`
+        )
         await Game.create({
           id: el.id,
           title: el.title,
           thumbnail: el.thumbnail,
           thumbnail_half: filename,
-          short_description: el.short_description,
-          game_url: el.game_url,
-          genre: el.genre,
-          platform: el.platform,
-          publisher: el.publisher,
-          developer: el.developer,
-          release_date: el.release_date,
-          freetogame_profile_url: el.freetogame_profile_url
+          data: dataGame.data
         })
       }
       res.send(games.data)
